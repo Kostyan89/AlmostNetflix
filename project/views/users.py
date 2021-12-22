@@ -7,7 +7,7 @@ from project.setup_db import db
 users_ns = Namespace('users')
 
 
-@user_ns.route('/user')
+@users_ns.route('/user')
 class UsersView(Resource):
     def post(self):
         req_json = request.json
