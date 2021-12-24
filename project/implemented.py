@@ -2,7 +2,7 @@ from dao.director import DirectorDAO
 from dao.genre import GenreDAO
 from dao.movie import MovieDAO
 from dao.user import UserDAO
-from services.auth import AuthService
+from services.auth_service import AuthService
 from services.directors_service import DirectorService
 from services.genres_service import GenreService
 from services.movies_service import MovieService
