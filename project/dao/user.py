@@ -41,11 +41,23 @@ class UserDAO(BaseDAO):
             base64.b64decode(get_hash),
             hashlib.pbkdf2_hmac('sha256', password.encode(), BaseConfig.PWD_HASH_SALT, PWD_HASH_ITERATIONS))
 
-    def update(self, user_d):
+    def partially_update(self, user_d):
         user = self.get_by_id(user_d.get("id"))
         user.name = user_d.get("name")
         user.surname = user_d.get("surname")
         user.favorite_genre = user_d.get("favorite_genre")
         self.session.add(user)
         self.session.commit()
+
+    def update(self, uid, password, new_password):
+        user = self.get_by_id(uid)
+        if password == user.password:
+            password = new_password
+            user.password = password
+        self.session.add(user)
+        self.session.commit()
+
+
+
+
 

@@ -47,8 +47,10 @@ class UserService(BaseService):
             user.surname = user.get("surname")
         if "favorite_genre" in user:
             user.surname = user.get("favorite_genre")
-        self.dao.update(user)
+        self.dao.partially_update(user)
 
-    def update(self, user_d):
-        user = User(**user_d)
-        self.dao.update(user=user)
+    def update_password(self, uid, old_password, new_password):
+        user = self.get_item_by_id(uid)
+        if old_password == user.password:
+            old_password = new_password
+        self.dao.update(password=old_password)
