@@ -46,8 +46,6 @@ class UserDAO(BaseDAO):
         user.name = user_d.get("name")
         user.surname = user_d.get("surname")
         user.favorite_genre = user_d.get("favorite_genre")
-        user.email = user_d.get("email")
-        user.password = user_d("password")
         self.session.add(user)
         self.session.commit()
 
