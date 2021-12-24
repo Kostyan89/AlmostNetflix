@@ -9,11 +9,11 @@ from flask_restx import abort
 from jwt import jwt
 
 from project.dao.models import User
-from project.implemented import user_service
+from project.implemented import users_service
 from project.setup_db import db
+from project.config import BaseConfig
 
 
-secret = 's3cR$eT'
 algo = 'HS256'
 
 
@@ -22,20 +22,20 @@ class AuthService:
     def _generate_tokens(data):
         now = datetime.now()
 
-        min30 = now + timedelta(minutes=30)
-        data["exp"] = calendar.timegm(min30.timetuple())
-        access_token = jwt.encode(data, secret, algorithm=algo)
+        min = now + timedelta(minutes=BaseConfig.TOKEN_EXPIRE_MINUTES)
+        data["exp"] = calendar.timegm(min.timetuple())
+        access_token = jwt.encode(data, BaseConfig.SECRET_KEY, algorithm=algo)
 
-        days130 = now + timedelta(days=130)
-        data["exp"] = calendar.timegm(days130.timetuple())
-        refresh_token = jwt.encode(data, secret, algorithm=algo)
+        days = now + timedelta(days=BaseConfig.TOKEN_EXPIRE_DAYS)
+        data["exp"] = calendar.timegm(days.timetuple())
+        refresh_token = jwt.encode(data, BaseConfig.SECRET_KEY, algorithm=algo)
 
         return {"access_token": access_token, "refresh_token": refresh_token}
 
     def create(self, username, password):
         user = db.session.query(User).filter(User.username == username).first()
 
-        ok = user_service.compare_passwords(password_hash=user.password, other_password=password)
+        ok = users_service.compare_passwords(password_hash=user.password, other_password=password)
         if not ok:
             abort(401)
         return self._generate_tokens({
@@ -50,7 +50,7 @@ class AuthService:
             abort(400)
 
         try:
-            data = jwt.decode(jwt=refresh_token, key=secret, algorithms=[algo])
+            data = jwt.decode(jwt=refresh_token, key=BaseConfig.SECRET_KEY, algorithms=[algo])
         except Exception as e:
             abort(400)
 
@@ -62,12 +62,12 @@ class AuthService:
             "username": user.username,
             "role": user.role
         }
-        min30 = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
-        data["exp"] = calendar.timegm(min30.timetuple())
-        access_token = jwt.encode(data, secret, algorithm=algo)
-        days130 = datetime.datetime.utcnow() + datetime.timedelta(days=130)
-        data["exp"] = calendar.timegm(days130.timetuple())
-        refresh_token = jwt.encode(data, secret, algorithm=algo)
+        min = datetime.datetime.utcnow() + datetime.timedelta(minutes=BaseConfig.TOKEN_EXPIRE_MINUTES)
+        data["exp"] = calendar.timegm(min.timetuple())
+        access_token = jwt.encode(data, BaseConfig.SECRET_KEY, algorithm=algo)
+        days = datetime.datetime.utcnow() + datetime.timedelta(days=BaseConfig.TOKEN_EXPIRE_DAYS)
+        data["exp"] = calendar.timegm(days.timetuple())
+        refresh_token = jwt.encode(data, BaseConfig.SECRET_KEY, algorithm=algo)
         tokens = {"access_token": access_token, "refresh_token": refresh_token}
 
         return tokens, 201
