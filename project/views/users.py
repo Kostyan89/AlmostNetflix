@@ -11,7 +11,6 @@ users_ns = Namespace('users')
 class UsersView(Resource):
     def post(self):
         req_json = request.json
-        user = User(**req_json)
-        db.session.add(user)
-        db.session.commit()
-        return "", 201, {"location": f"/movies/{user.id}"}
+        new_user = user_service.create(req_json)
+        return user_schema.dump(new_user), 201
+

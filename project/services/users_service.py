@@ -4,7 +4,7 @@ from project.schemas.users import UserSchema
 from project.services.base import BaseService
 
 
-class UsersService(BaseService):
+class UserService(BaseService):
     def get_item_by_id(self, uid):
         user = UserDAO(self._db_session).get_by_id(uid)
         if not user:
