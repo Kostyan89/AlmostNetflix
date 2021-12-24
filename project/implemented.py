@@ -2,6 +2,7 @@ from dao.director import DirectorDAO
 from dao.genre import GenreDAO
 from dao.movie import MovieDAO
 from dao.user import UserDAO
+from project.schemas.users import UserSchema
 from services.auth_service import AuthService
 from services.directors_service import DirectorService
 from services.genres_service import GenreService
@@ -18,5 +19,7 @@ user_dao = UserDAO(session=db.session)
 director_service = DirectorService(dao=director_dao)
 genre_service = GenreService(dao=genre_dao)
 movie_service = MovieService(dao=movie_dao)
-user_service = UserService(dao=user_dao)
+users_service = UserService(dao=user_dao)
 auth_service = AuthService(dao=user_dao)
+
+user_schema = UserSchema()
