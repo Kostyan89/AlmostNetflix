@@ -1,12 +1,12 @@
-from sqlalchemy.orm.scoping import scoped_session
 
-from project.dao import DirectorDAO
+
+
+from project.dao.base import BaseDAO
 from project.dao.models import Genre
 
 
-class GenreDAO(DirectorDAO):
-    def __init__(self, session: scoped_session):
-        self._db_session = session
+class GenreDAO(BaseDAO):
+
 
     def get_by_id(self, pk):
         return self._db_session.query(Genre).filter(Genre.id == pk).one_or_none()

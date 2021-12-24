@@ -6,12 +6,11 @@ from flask_restx import abort
 from sqlalchemy.orm.scoping import scoped_session
 
 from project.constants import PWD_HASH_SALT, PWD_HASH_ITERATIONS
+from project.dao.base import BaseDAO
 from project.dao.models import User
 
 
-class UserDAO:
-    def __init__(self, session: scoped_session):
-        self._db_session = session
+class UserDAO(BaseDAO):
 
     def get_by_id(self, pk):
         return self._db_session.query(User).filter(User.id == pk).one_or_none()
