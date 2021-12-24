@@ -1,9 +1,10 @@
 from sqlalchemy.orm.scoping import scoped_session
 
+from project.dao import DirectorDAO
 from project.dao.models import Genre
 
 
-class GenreDAO:
+class GenreDAO(DirectorDAO):
     def __init__(self, session: scoped_session):
         self._db_session = session
 

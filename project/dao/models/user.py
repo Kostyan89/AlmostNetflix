@@ -7,7 +7,7 @@ class User(BaseMixin, db.Model):
 
     name = db.Column(db.String(100), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.Text, nullable=False)
+    password = db.Column(db.Text, nullable=False, load_only=True)
     surname = db.Column(db.String(100))
     favorite_genre = db.Column(db.String(100), db.ForeignKey("genres.id"))
 
