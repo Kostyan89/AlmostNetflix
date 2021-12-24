@@ -6,7 +6,7 @@ from flask_restx import abort
 
 from project.constants import PWD_HASH_SALT, PWD_HASH_ITERATIONS
 from project.dao.base import BaseDAO
-from project.dao.models import User
+from project.dao.models import User, user
 from project.config import BaseConfig
 
 class UserDAO(BaseDAO):
@@ -49,11 +49,8 @@ class UserDAO(BaseDAO):
         self.session.add(user)
         self.session.commit()
 
-    def update(self, uid, password, new_password):
-        user = self.get_by_id(uid)
-        if password == user.password:
-            password = new_password
-            user.password = password
+    def update(self, new_password):
+        user.password = new_password
         self.session.add(user)
         self.session.commit()
 
