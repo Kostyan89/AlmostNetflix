@@ -4,6 +4,7 @@ from flask_restx import Resource, Namespace, ValidationError, abort
 from flask import request
 from project.implemented import users_service, user_schema
 from project.dao.models import User
+from project.schemas.users import UserSchema
 from project.setup_db import db
 
 users_ns = Namespace('users')
@@ -23,3 +24,16 @@ class UsersView(Resource):
             )
 
 
+class UserService(Resource):
+    def get(self, uid):
+        r = users_service.get_one(uid)
+        sm_d = UserSchema().dump(r)
+        return sm_d, 200
+
+    def put(self, uid):
+        updated_user = users_service.filter_by(uid).update(request.json)
+        return user_schema.dump(updated_user), 204
+
+    def patch(self, uid):
+        user = users_service.filter_by(uid).partially_update(request.json)
+        return user, 204

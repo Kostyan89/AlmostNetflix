@@ -39,7 +39,7 @@ class AuthService:
         if not ok:
             abort(401)
         return self._generate_tokens({
-            "username": user.username,
+            "email": user.email,
             "role": user.role
         })
 
@@ -59,7 +59,7 @@ class AuthService:
         user = db.session.query(User).filter(User.username == username).first()
 
         data = {
-            "username": user.username,
+            "email": user.email,
             "role": user.role
         }
         min = datetime.datetime.utcnow() + datetime.timedelta(minutes=BaseConfig.TOKEN_EXPIRE_MINUTES)
