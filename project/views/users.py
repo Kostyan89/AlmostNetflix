@@ -2,19 +2,18 @@ from http import HTTPStatus
 
 from flask_restx import Resource, Namespace, ValidationError, abort
 from flask import request
-from project.implemented import users_service, user_schema
+from project.implemented import users_service, user_schema, user_dao
 from project.dao.models import User
-from project.schemas.users import UserSchema
 from project.setup_db import db
 
 users_ns = Namespace('users')
 
 
-@users_ns.route('/user')
+@users_ns.route('/')
 class UsersView(Resource):
     def post(self):
         try:
-            data = User().load(request.json)
+            data = user_dao.load(request.json)
             new_user = users_service.create_user(**data)
             return user_schema.dump(new_user), 201
         except ValidationError as e:
@@ -24,11 +23,12 @@ class UsersView(Resource):
             )
 
 
+@users_ns.route('<uid: int>')
 class UserService(Resource):
     def get(self, uid):
-        r = users_service.get_one(uid)
-        sm_d = UserSchema().dump(r)
-        return sm_d, 200
+        user = users_service.get_one(uid)
+        selected_user = user_schema.dump(user)
+        return selected_user, 200
 
     def put(self, uid):
         updated_user = users_service.filter_by(uid).update(request.json)

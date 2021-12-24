@@ -2,6 +2,7 @@ import base64
 import hashlib
 import hmac
 
+from project.dao.models import User
 from project.dao.user import UserDAO
 from project.exceptions import ItemNotFound
 from project.schemas.users import UserSchema
@@ -46,4 +47,8 @@ class UserService(BaseService):
             user.surname = user.get("surname")
         if "favorite_genre" in user:
             user.surname = user.get("favorite_genre")
-        self.user_dao.update(user)
+        self.dao.update(user)
+
+    def update(self, user_d):
+        user = User(**user_d)
+        self.dao.update(user=user)
