@@ -6,6 +6,7 @@ from flask import request
 from project.helpers import auth_required
 from project.schemas.users import UserSchema
 from project.services import UserService
+from project.setup_db import db
 
 users_ns = Namespace('users')
 
@@ -15,8 +16,7 @@ class UsersView(Resource):
     def post(self):
         try:
             data = UserSchema().load(request.json)
-            new_user = UserService().create_user(**data)
-            return UserSchema().dump(new_user), 201
+            return UserService(db.session).create_user(**data)
         except ValidationError as e:
             abort(
                 code=HTTPStatus.BAD_REQUEST,
@@ -24,7 +24,7 @@ class UsersView(Resource):
             )
 
 
-@users_ns.route('/<uid: int>')
+@users_ns.route('/<int:uid>')
 class UserView(Resource):
     @auth_required
     def get(self, uid):
@@ -34,7 +34,7 @@ class UserView(Resource):
 
     @auth_required
     def patch(self, uid):
-        user = UserService.filter_by(uid).partially_update(request.json)
+        user = UserService().filter_by(uid).partially_update(request.json)
         return user, 204
 
 
