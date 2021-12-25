@@ -2,6 +2,8 @@ import base64
 import hashlib
 import hmac
 
+from flask_restx import abort
+
 from project.dao.models import User
 from project.dao.user import UserDAO
 from project.exceptions import ItemNotFound
@@ -24,6 +26,9 @@ class UserService(BaseService):
         return UserSchema(many=True).dump(users)
 
     def create_user(self, user_d):
+        data_for_check = User.get_by_email(user_d.email)
+        if user_d["email"] == data_for_check:
+            abort(405)
         return self.dao.create(user_d)
 
     def partially_update(self, uid):
