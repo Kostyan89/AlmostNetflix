@@ -4,10 +4,10 @@ import hmac
 
 from flask_restx import abort
 
-from project.constants import PWD_HASH_SALT, PWD_HASH_ITERATIONS
 from project.dao.base import BaseDAO
 from project.dao.models import User, user
 from project.config import BaseConfig
+
 
 class UserDAO(BaseDAO):
     def get_by_id(self, pk):
@@ -20,13 +20,13 @@ class UserDAO(BaseDAO):
         return self._db_session.query(User).all()
 
     def create(self, user_d):
-        ent = User(**user_d)
+        new_user = User(**user_d)
         data_for_check = User.get_by_email(user_d.email)
         if user_d["email"] == data_for_check:
             abort(405)
-        self.session.add(ent)
+        self.session.add(new_user)
         self.session.commit()
-        return ent
+        return user
 
     def get_hash(password):
         return hashlib.pbkdf2_hmac(

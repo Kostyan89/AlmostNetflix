@@ -34,7 +34,7 @@ class UserView(Resource):
 
     @auth_required
     def patch(self, uid):
-        user = UserService().filter_by(uid).partially_update(request.json)
+        user = UserService(db.session).filter_by(uid).partially_update(request.json)
         return user, 204
 
 
