@@ -28,4 +28,8 @@ def get_hash(password):
 def compare_passwords(get_hash, password):
     return hmac.compare_digest(
         base64.b64decode(get_hash),
-        hashlib.pbkdf2_hmac('sha256', password.encode(), BaseConfig.PWD_HASH_SALT, BaseConfig.PWD_HASH_ITERATIONS))
+        hashlib.pbkdf2_hmac(hash_name='sha256',
+                            password=password.encode(),
+                            salt=BaseConfig.PWD_HASH_SALT,
+                            iterations=BaseConfig.PWD_HASH_ITERATIONS)
+    )

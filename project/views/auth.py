@@ -8,6 +8,7 @@ from project.dao.models import User
 from project.dao.models.auth import AuthValidator
 from project.schemas.users import UserSchema
 from project.services.auth_service import AuthService
+from project.setup_db import db
 
 auth_ns = Namespace('auth')
 
@@ -32,11 +33,12 @@ class AuthViewLogin(Resource):
         tokens = AuthService().update(request.json)
         return tokens, 201
 
+
 @auth_ns.route('/register')
 class AuthViewRegister(Resource):
     def post(self):
         try:
-            data = UserSchema().load(request.json)
+            data = AuthValidator().load(request.json)
             new_user = User(**data)
             return new_user, 201
         except ValidationError:

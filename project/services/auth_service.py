@@ -1,7 +1,6 @@
-import base64
+
 import calendar
-import hashlib
-import hmac
+
 from datetime import datetime, timedelta
 
 from flask import request
@@ -12,7 +11,7 @@ from project.dao.models import User
 from project.services import UserService
 from project.setup_db import db
 from project.config import BaseConfig
-
+from project.tools.security import compare_passwords
 
 algo = 'HS256'
 
@@ -35,7 +34,7 @@ class AuthService:
     def create(self, username, password):
         user = db.session.query(User).filter(User.username == username).first()
 
-        ok = UserService().compare_passwords(password_hash=user.password, other_password=password)
+        ok = compare_passwords(password_hash=user.password, other_password=password)
         if not ok:
             abort(401)
         return self._generate_tokens({

@@ -28,7 +28,7 @@ class UsersView(Resource):
 class UserView(Resource):
     @auth_required
     def get(self, uid):
-        user = UserService().get_item_by_id(uid)
+        user = UserService(db.session).get_item_by_id(uid)
         selected_user = UserSchema().dump(user)
         return selected_user, 200
 
