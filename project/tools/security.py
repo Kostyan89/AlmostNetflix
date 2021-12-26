@@ -30,6 +30,6 @@ def compare_passwords(get_hash, password):
         base64.b64decode(get_hash),
         hashlib.pbkdf2_hmac(hash_name='sha256',
                             password=password.encode(),
-                            salt=BaseConfig.PWD_HASH_SALT,
-                            iterations=BaseConfig.PWD_HASH_ITERATIONS)
+                            salt=current_app.config["PWD_HASH_SALT"],
+                            iterations=current_app.config["PWD_HASH_ITERATIONS"])
     )

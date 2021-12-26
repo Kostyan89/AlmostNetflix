@@ -53,3 +53,4 @@ class UserDAO(BaseDAO):
         user.password = new_password
         self.session.add(user)
         self.session.commit()
+

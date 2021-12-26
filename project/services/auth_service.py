@@ -3,7 +3,7 @@ import calendar
 
 from datetime import datetime, timedelta
 
-from flask import request
+from flask import request, current_app
 from flask_restx import abort
 from jwt import jwt
 
@@ -70,3 +70,11 @@ class AuthService:
         tokens = {"access_token": access_token, "refresh_token": refresh_token}
 
         return tokens, 201
+
+
+# def create_tokens(self, time, _tuple):
+#     expire_period = datetime.datetime.utcnow() + datetime.timedelta(time)
+#     data["exp"] = calendar.timegm(_tuple)
+#     token = jwt.encode(data, time, algorithm=algo)
+#
+# create_tokens(time=current_app.config["TOKEN_EXPIRE_DAYS"], data, _tuple=days.timetuple())
