@@ -3,7 +3,7 @@ import hashlib
 import hmac
 
 from flask_restx import abort
-
+from sqlalchemy.orm.scoping import scoped_session
 from project.dao.models import User
 from project.dao.user import UserDAO
 from project.exceptions import ItemNotFound
@@ -12,7 +12,8 @@ from project.services.base import BaseService
 from project.config import BaseConfig
 
 class UserService(BaseService):
-    def __init__(self, dao: UserDAO):
+    def __init__(self, dao: UserDAO, session: scoped_session):
+        super().__init__(self, session)
         self.dao = dao
 
     def get_item_by_id(self, uid):
