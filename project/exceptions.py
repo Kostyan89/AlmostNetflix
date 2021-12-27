@@ -2,15 +2,16 @@ class ItemNotFound(Exception):
     pass
 
 
-class DublicateKeyError(Exception):
+class DublicateError(Exception):
+    pass
 
 
 
 
-integrity error
-raise dublicate error
-
-
-
-view diblocate error
-raise abort 404
+# integrity error
+# raise dublicate error
+#
+#
+#
+# view dublicateerror
+# raise abort 404

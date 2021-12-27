@@ -1,13 +1,14 @@
 import base64
 import hashlib
 import hmac
+from sqlite3 import IntegrityError
 
 from flask_restx import abort
 
 from project.dao.base import BaseDAO
 from project.dao.models import User, user
 from project.config import BaseConfig
-from project.exceptions import ItemNotFound
+from project.exceptions import ItemNotFound, DublicateError
 
 
 class UserDAO(BaseDAO):
@@ -23,13 +24,11 @@ class UserDAO(BaseDAO):
     def create(self, email, password):
         try:
             new_user = User(email, password)
-            data_for_check = User.get_by_email(email)
             self.session.add(new_user)
             self.session.commit()
-        except ItemNotFound as m:
-
-
-
+            return new_user
+        except IntegrityError as e:
+            raise DublicateError
 
     def get_hash(password):
         return hashlib.pbkdf2_hmac(

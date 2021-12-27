@@ -27,9 +27,6 @@ class UserService(BaseService):
         return UserSchema(many=True).dump(users)
 
     def create_user(self, user_d):
-        data_for_check = User.get_by_email(user_d.email)
-        if data_for_check is True:
-            return
         return self.dao.create(user_d)
 
 

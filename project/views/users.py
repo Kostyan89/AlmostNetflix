@@ -3,6 +3,7 @@ from http import HTTPStatus
 from flask_restx import Resource, Namespace, ValidationError, abort
 from flask import request
 
+from project.exceptions import DublicateError
 from project.helpers import auth_required
 from project.schemas.users import UserSchema
 from project.services import UserService
@@ -22,6 +23,8 @@ class UsersView(Resource):
                 code=HTTPStatus.BAD_REQUEST,
                 message=str(e)
             )
+        except DublicateError:
+            abort(404)
 
 
 @users_ns.route('/<int:uid>')
