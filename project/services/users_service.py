@@ -12,9 +12,9 @@ from project.services.base import BaseService
 from project.config import BaseConfig
 
 class UserService(BaseService):
-    def __init__(self, dao: UserDAO, session: scoped_session):
+    def __init__(self, session: scoped_session):
         super().__init__(self, session)
-        self.dao = dao
+        self.dao = UserDAO
 
     def get_item_by_id(self, uid):
         user = UserDAO(self._db_session).get_by_id(uid)
