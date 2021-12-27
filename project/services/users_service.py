@@ -28,9 +28,10 @@ class UserService(BaseService):
 
     def create_user(self, user_d):
         data_for_check = User.get_by_email(user_d.email)
-        if user_d["email"] == data_for_check:
-            abort(405)
+        if data_for_check is True:
+            return
         return self.dao.create(user_d)
+
 
     def partially_update(self, uid):
         user = self.get_item_by_id(uid)

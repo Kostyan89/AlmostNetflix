@@ -7,6 +7,7 @@ from flask_restx import abort
 from project.dao.base import BaseDAO
 from project.dao.models import User, user
 from project.config import BaseConfig
+from project.exceptions import ItemNotFound
 
 
 class UserDAO(BaseDAO):
@@ -19,14 +20,16 @@ class UserDAO(BaseDAO):
     def get_all(self):
         return self._db_session.query(User).all()
 
-    def create(self, user_d):
-        new_user = User(**user_d)
-        data_for_check = User.get_by_email(user_d.email)
-        if user_d["email"] == data_for_check:
-            abort(405)
-        self.session.add(new_user)
-        self.session.commit()
-        return user
+    def create(self, email, password):
+        try:
+            new_user = User(email, password)
+            data_for_check = User.get_by_email(email)
+            self.session.add(new_user)
+            self.session.commit()
+        except ItemNotFound as m:
+
+
+
 
     def get_hash(password):
         return hashlib.pbkdf2_hmac(

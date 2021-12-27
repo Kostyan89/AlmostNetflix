@@ -5,7 +5,7 @@ from project.setup_db import db
 class User(BaseMixin, db.Model):
     __tablename__ = "users"
 
-    name = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(100))
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.Text, nullable=False)
     surname = db.Column(db.String(100))
