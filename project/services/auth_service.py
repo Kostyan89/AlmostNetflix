@@ -19,16 +19,13 @@ algo = 'HS256'
 class AuthService:
     @staticmethod
     def _generate_tokens(data):
-        now = datetime.now()
-
-        min = now + timedelta(minutes=BaseConfig.TOKEN_EXPIRE_MINUTES)
+        min = datetime.datetime.utcnow() + timedelta(minutes=current_app.config["TOKEN_EXPIRE_MINUTES"])
         data["exp"] = calendar.timegm(min.timetuple())
-        access_token = jwt.encode(data, BaseConfig.SECRET_KEY, algorithm=algo)
+        access_token = jwt.encode(data, BaseConfig.SECRET_KEY, algorithm=current_app.config["ALGO"])
 
-        days = now + timedelta(days=BaseConfig.TOKEN_EXPIRE_DAYS)
+        days = datetime.datetime.utcnow() + timedelta(days=current_app.config["TOKEN_EXPIRE_DAYS"])
         data["exp"] = calendar.timegm(days.timetuple())
-        refresh_token = jwt.encode(data, BaseConfig.SECRET_KEY, algorithm=algo)
-
+        refresh_token = jwt.encode(data, BaseConfig.SECRET_KEY, algorithm=current_app.config["ALGO"])
         return {"access_token": access_token, "refresh_token": refresh_token}
 
     def create(self, username, password):
@@ -42,7 +39,7 @@ class AuthService:
             "role": user.role
         })
 
-    def update(self):
+    def update(self, _generate_tokens):
         req_json = request.json
         refresh_token = req_json.get("refresh_token")
         if refresh_token is None:
@@ -56,25 +53,6 @@ class AuthService:
         username = data.get("username")
 
         user = db.session.query(User).filter(User.username == username).first()
-
-        data = {
-            "email": user.email,
-            "role": user.role
-        }
-        min = datetime.datetime.utcnow() + datetime.timedelta(minutes=BaseConfig.TOKEN_EXPIRE_MINUTES)
-        data["exp"] = calendar.timegm(min.timetuple())
-        access_token = jwt.encode(data, BaseConfig.SECRET_KEY, algorithm=algo)
-        days = datetime.datetime.utcnow() + datetime.timedelta(days=BaseConfig.TOKEN_EXPIRE_DAYS)
-        data["exp"] = calendar.timegm(days.timetuple())
-        refresh_token = jwt.encode(data, BaseConfig.SECRET_KEY, algorithm=algo)
-        tokens = {"access_token": access_token, "refresh_token": refresh_token}
+        tokens = _generate_tokens(data)
 
         return tokens, 201
-
-
-# def create_tokens(self, time, _tuple):
-#     expire_period = datetime.datetime.utcnow() + datetime.timedelta(time)
-#     data["exp"] = calendar.timegm(_tuple)
-#     token = jwt.encode(data, time, algorithm=algo)
-#
-# create_tokens(time=current_app.config["TOKEN_EXPIRE_DAYS"], data, _tuple=days.timetuple())
