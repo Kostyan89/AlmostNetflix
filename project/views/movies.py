@@ -1,4 +1,4 @@
-
+from flask import request
 from flask_restx import abort, Namespace, Resource
 
 
@@ -14,7 +14,11 @@ class MoviesView(Resource):
     @movies_ns.response(200, "OK")
     def get(self):
         """Get all movies"""
-        return MovieService(db.session).get_all_movies()
+        page = request.args.get("page", 1)
+        limit = 12
+        start = (page - 1)*limit
+
+        return db.session.query(MovieService).limit(limit).offset(start).get_all_movies()
 
 
 @movies_ns.route("/<int:movie_id>")
