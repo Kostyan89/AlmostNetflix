@@ -49,7 +49,7 @@ class UserView2(Resource):
     @auth_required
     def put(self, uid, new_password):
         try:
-            UserService().update_password(uid, new_password)
+            UserService(db.session).update_password(uid, new_password)
             return "", 204
         except ValueError as e:
             abort(code=HTTPStatus.BAD_REQUEST, message=str(e))
