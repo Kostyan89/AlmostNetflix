@@ -37,15 +37,19 @@ class UserView(Resource):
 
     @auth_required
     def patch(self, uid):
-        user = UserService(db.session).filter_by(uid).partially_update(request.json)
-        return user, 204
+        try:
+            user = UserService(db.session).filter_by(uid).partially_update(request.json)
+            return user, 204
+        except ValueError as e:
+            abort(code=404, message=str(e))
 
 
-# @users_ns.route('/password')
-# class UserView2(Resource):
-#     @auth_required
-#     def put(self, uid, new_password):
-#         user = UserService.get_item_by_id(uid)
-#
-#
-#         return UserSchema.dump(updated_user), 204
+@users_ns.route('/password')
+class UserView2(Resource):
+    @auth_required
+    def put(self, uid, new_password):
+        try:
+            UserService().update_password(uid, new_password)
+            return "", 204
+        except ValueError as e:
+            abort(code=HTTPStatus.BAD_REQUEST, message=str(e))

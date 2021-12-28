@@ -10,6 +10,8 @@ from project.exceptions import ItemNotFound
 from project.schemas.users import UserSchema
 from project.services.base import BaseService
 from project.config import BaseConfig
+from project.tools.security import get_hash, compare_passwords
+
 
 class UserService(BaseService):
     def __init__(self, session: scoped_session):
@@ -29,7 +31,6 @@ class UserService(BaseService):
     def create_user(self, user_d):
         return self.dao.create(user_d)
 
-
     def partially_update(self, uid):
         user = self.get_item_by_id(uid)
         if "name" in user:
@@ -40,8 +41,9 @@ class UserService(BaseService):
             user.surname = user.get("favorite_genre")
         self.dao.partially_update(user)
 
-    def update_password(self, uid, password, new_password):
+    def update_password(self, uid, new_password):
         user = self.get_item_by_id(uid)
-        if password in user:
-            user.password = user.get(new_password)
-        self.dao.update(user)
+        password_hash = get_hash(new_password)
+        while compare_passwords(password_hash, user.password):
+            self.dao.update(password_hash)
+        return user
