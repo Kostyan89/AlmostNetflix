@@ -31,15 +31,8 @@ class UserService(BaseService):
     def create_user(self, user_d):
         return self.dao.create(user_d)
 
-    def partially_update(self, uid):
-        user = self.get_item_by_id(uid)
-        if "name" in user:
-            user.name = user.get("name")
-        if "surname" in user:
-            user.surname = user.get("surname")
-        if "favorite_genre" in user:
-            user.surname = user.get("favorite_genre")
-        self.dao.partially_update(user)
+    def partially_update(self, uid, **kwargs):
+        return self.dao.partially_update(uid, **kwargs)
 
     def update_password(self, uid, new_password):
         user = self.get_item_by_id(uid)

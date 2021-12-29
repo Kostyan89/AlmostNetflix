@@ -5,7 +5,7 @@ from flask import request
 
 from project.exceptions import DublicateError
 from project.helpers import auth_required
-from project.schemas.users import UserSchema
+from project.schemas.users import UserSchema, UserData
 from project.services import UserService
 from project.setup_db import db
 
@@ -37,8 +37,9 @@ class UserView(Resource):
 
     @auth_required
     def patch(self, uid):
+        data = UserData().load(request.json)
         try:
-            user = UserService(db.session).filter_by(uid).partially_update(request.json)
+            user = UserService(db.session).partially_update(uid, data)
             return user, 204
         except ValueError as e:
             abort(code=404, message=str(e))
