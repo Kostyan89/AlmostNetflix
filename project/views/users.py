@@ -3,7 +3,7 @@ from http import HTTPStatus
 from flask_restx import Resource, Namespace, ValidationError, abort
 from flask import request
 
-from project.exceptions import DublicateError
+from project.exceptions import DublicateError, ItemNotFound
 from project.helpers import auth_required
 from project.schemas.users import UserSchema, UserData
 from project.services import UserService
@@ -28,9 +28,11 @@ class UsersView(Resource):
 class UserView(Resource):
     @auth_required
     def get(self, uid):
-        user = UserService(db.session).get_item_by_id(uid)
-        selected_user = UserSchema().dump(user)
-        return selected_user, 200
+        try:
+            user = UserService(db.session).get_item_by_id(uid)
+            return UserSchema().dump(user), 200
+        except ItemNotFound as e:
+            abort(code=HTTPStatus.BAD_REQUEST, message=str(e))
 
     @auth_required
     def patch(self, uid):
