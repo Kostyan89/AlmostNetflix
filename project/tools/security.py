@@ -19,19 +19,9 @@ def generate_password_digest(password):
 
 
 def get_hash(password):
-    return hashlib.pbkdf2_hmac(
-        hash_name='sha256',
-        password=password.encode('utf-8'),
-        salt=current_app.config["PWD_HASH_SALT"],
-        iterations=current_app.config["PWD_HASH_ITERATIONS"]
-    ).decode("utf-8", "ignore")
+    return generate_password_digest(password).decode("utf-8", "ignore")
 
 
 def compare_passwords(hash, password):
     return hmac.compare_digest(
-        base64.b64decode(hash),
-        hashlib.pbkdf2_hmac(hash_name='sha256',
-                            password=password.encode(),
-                            salt=current_app.config["PWD_HASH_SALT"],
-                            iterations=current_app.config["PWD_HASH_ITERATIONS"])
-    )
+        base64.b64decode(hash), generate_password_digest(password))
