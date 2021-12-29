@@ -16,9 +16,11 @@ class MoviesView(Resource):
         """Get all movies"""
         page = request.args.get("page", 1)
         limit = 12
-        start = (page - 1)*limit
+        start = (page - 1) * limit
 
-        return db.session.query(MovieService).limit(limit).offset(start).get_all_movies()
+        return (
+            db.session.query(MovieService).limit(limit).offset(start).get_all_movies()
+        )
 
 
 @movies_ns.route("/<int:movie_id>")

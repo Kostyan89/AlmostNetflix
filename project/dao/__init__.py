@@ -4,8 +4,4 @@ from .movie import MovieDAO
 from .user import UserDAO
 
 
-__all__ = [
-    "GenreDAO", "DirectorDAO", "UserDAO", "MovieDAO"
-]
-
-
+__all__ = ["GenreDAO", "DirectorDAO", "UserDAO", "MovieDAO"]

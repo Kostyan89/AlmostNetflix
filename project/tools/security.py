@@ -1,12 +1,9 @@
 import base64
-import calendar
+
 import hashlib
 import hmac
-from datetime import datetime, timedelta
-from flask import current_app
-import jwt
 
-from project.config import BaseConfig
+from flask import current_app
 
 
 def generate_password_digest(password):
@@ -24,4 +21,5 @@ def get_hash(password):
 
 def compare_passwords(hash, password):
     return hmac.compare_digest(
-        base64.b64decode(hash), generate_password_digest(password))
+        base64.b64decode(hash), generate_password_digest(password)
+    )

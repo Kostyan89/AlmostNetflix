@@ -9,10 +9,10 @@ from project.tools.validators import AuthValidator
 from project.tools.token_generates import Authentication
 from project.tools.validators import TokensValidator
 
-auth_ns = Namespace('auth')
+auth_ns = Namespace("auth")
 
 
-@auth_ns.route('/login')
+@auth_ns.route("/login")
 class AuthViewLogin(Resource):
     def post(self):
         try:
@@ -20,10 +20,7 @@ class AuthViewLogin(Resource):
             tokens = Authentication().create(**data)
             return tokens, HTTPStatus.CREATED
         except ValidationError as e:
-            abort(
-                code=HTTPStatus.BAD_REQUEST,
-                message=str(e)
-            )
+            abort(code=HTTPStatus.BAD_REQUEST, message=str(e))
 
     def put(self):
         auth = TokensValidator().load(request.json)
@@ -33,7 +30,7 @@ class AuthViewLogin(Resource):
             abort(HTTPStatus.BAD_REQUEST, message=str(e))
 
 
-@auth_ns.route('/register')
+@auth_ns.route("/register")
 class AuthViewRegister(Resource):
     def post(self):
         try:
@@ -42,5 +39,5 @@ class AuthViewRegister(Resource):
         except ValidationError:
             abort(
                 code=HTTPStatus.BAD_REQUEST,
-                message="Не могу создать, чего-то не хватает"
+                message="Не могу создать, чего-то не хватает",
             )

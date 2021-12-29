@@ -1,14 +1,8 @@
-import base64
-import hashlib
-import hmac
+
 from sqlite3 import IntegrityError
-
-from flask_restx import abort
-
 from project.dao.base import BaseDAO
 from project.dao.models import User, user
-from project.config import BaseConfig
-from project.exceptions import ItemNotFound, DublicateError
+from project.exceptions import DublicateError
 
 
 class UserDAO(BaseDAO):
@@ -27,7 +21,7 @@ class UserDAO(BaseDAO):
             self._db_session.add(new_user)
             self._db_session.commit()
             return new_user
-        except IntegrityError as e:
+        except IntegrityError:
             raise DublicateError
 
     def partially_update(self, user_d, name=None, surname=None, favorite_genre=None):
@@ -46,4 +40,3 @@ class UserDAO(BaseDAO):
         user.password = new_password
         self._db_session.add(user)
         self._db_session.commit()
-

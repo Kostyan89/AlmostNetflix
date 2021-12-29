@@ -1,6 +1,3 @@
-from flask import request
-
-from project.config import BaseConfig
 from project.dao.movie import MovieDAO
 from project.exceptions import ItemNotFound
 from project.schemas.movie import MovieSchema

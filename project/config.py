@@ -17,7 +17,8 @@ class BaseConfig:
 
     PWD_HASH_SALT = base64.b64decode("salt")
     PWD_HASH_ITERATIONS = 100_000
-    ALGO = 'HS256'
+    ALGO = "HS256"
+
 
 class TestingConfig(BaseConfig):
     TESTING = True

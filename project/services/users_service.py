@@ -1,15 +1,10 @@
-import base64
-import hashlib
-import hmac
-
-from flask_restx import abort
 from sqlalchemy.orm.scoping import scoped_session
-from project.dao.models import User
+
 from project.dao.user import UserDAO
 from project.exceptions import ItemNotFound
 from project.schemas.users import UserSchema
 from project.services.base import BaseService
-from project.config import BaseConfig
+
 from project.tools.security import get_hash, compare_passwords
 
 

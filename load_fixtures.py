@@ -16,19 +16,19 @@ with app.app_context():
     for director in data["directors"]:
         db.session.add(Director(id=director["pk"], name=director["name"]))
     for movie in data["movies"]:
-        db.session.add(Movie(
-            id=movie["pk"],
-            title=movie["title"],
-            description=movie["description"],
-            trailer=movie["trailer"],
-            year=movie["year"],
-            rating=movie["rating"],
-            genre_id=movie["genre_id"],
-            director_id=movie["director_id"]
-        ))
+        db.session.add(
+            Movie(
+                id=movie["pk"],
+                title=movie["title"],
+                description=movie["description"],
+                trailer=movie["trailer"],
+                year=movie["year"],
+                rating=movie["rating"],
+                genre_id=movie["genre_id"],
+                director_id=movie["director_id"],
+            )
+        )
     try:
         db.session.commit()
     except IntegrityError:
         print("Fixtures already loaded")
-
-

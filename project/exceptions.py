@@ -10,3 +10,5 @@ class ValidationError(Exception):
     pass
 
 
+class UpdateError(Exception):
+    pass

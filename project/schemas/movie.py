@@ -13,5 +13,3 @@ class MovieSchema(Schema):
     rating = fields.Float(required=True, validate=Range(min=0, max=10))
     genre_id = fields.Int(required=True)
     director_id = fields.Int(required=True)
-
-    
