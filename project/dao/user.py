@@ -34,6 +34,10 @@ class UserDAO(BaseDAO):
         user = self.get_by_id(user_d)
         if name:
             user.name = name
+        if surname:
+            user.surname = surname
+        if favorite_genre:
+            user.favorite_genre = favorite_genre
         self._db_session.add(user)
         self._db_session.commit()
 

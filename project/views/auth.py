@@ -5,11 +5,11 @@ from flask_restx import Resource, Namespace, abort
 from marshmallow import ValidationError
 
 from project.dao.models import User
-from project.schemas.auth import AuthValidator
+from project.tools.validators import AuthValidator
 from project.schemas.users import UserSchema
 from project.services.auth_service import AuthService
 from project.setup_db import db
-from project.tools.tokens_validator import TokensValidator
+from project.tools.validators import TokensValidator
 
 auth_ns = Namespace('auth')
 
