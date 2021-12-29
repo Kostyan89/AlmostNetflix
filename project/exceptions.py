@@ -8,10 +8,3 @@ class DublicateError(Exception):
 
 
 
-# integrity error
-# raise dublicate error
-#
-#
-#
-# view dublicateerror
-# raise abort 404

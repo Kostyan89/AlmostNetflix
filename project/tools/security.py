@@ -4,7 +4,7 @@ import hashlib
 import hmac
 from datetime import datetime, timedelta
 from flask import current_app
-from jwt import jwt
+import jwt
 
 from project.config import BaseConfig
 
