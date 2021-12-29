@@ -9,6 +9,7 @@ from project.schemas.auth import AuthValidator
 from project.schemas.users import UserSchema
 from project.services.auth_service import AuthService
 from project.setup_db import db
+from project.tools.tokens_validator import TokensValidator
 
 auth_ns = Namespace('auth')
 
@@ -27,7 +28,7 @@ class AuthViewLogin(Resource):
             )
 
     def put(self):
-        auth = AuthValidator().load(request.json)
+        auth = TokensValidator().load(request.json)
         if auth is None:
             abort(400)
         tokens = AuthService(db.session).update(request.json)
