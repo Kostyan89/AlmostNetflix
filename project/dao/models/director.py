@@ -10,4 +10,3 @@ class Director(BaseMixin, db.Model):
         return f"<Director '{self.name}'>"
 
 
-dir = Director(Vasya)

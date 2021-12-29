@@ -8,15 +8,13 @@ from flask_restx import abort
 import jwt
 
 from project.dao.models import User
-from project.services.base import BaseService
 from project.setup_db import db
 from project.config import BaseConfig
 from project.tools.security import compare_passwords
 
-algo = 'HS256'
 
 
-class AuthService(BaseService):
+class Authentication:
     @staticmethod
     def _generate_tokens(data):
         min = datetime.datetime.utcnow() + timedelta(minutes=current_app.config["TOKEN_EXPIRE_MINUTES"])
@@ -39,20 +37,15 @@ class AuthService(BaseService):
             "role": user.role
         })
 
-    def update(self, _generate_tokens):
-        req_json = request.json
-        refresh_token = req_json.get("refresh_token")
-        if refresh_token is None:
-            abort(400)
-
+    def update(self, refresh_token):
         try:
-            data = jwt.decode(jwt=refresh_token, key=BaseConfig.SECRET_KEY, algorithms=[algo])
+            data = jwt.decode(jwt=refresh_token, key=BaseConfig.SECRET_KEY, algorithms=current_app.config["ALGO"])
         except Exception as e:
             abort(400)
 
         username = data.get("username")
 
         user = db.session.query(User).filter(User.username == username).first()
-        tokens = _generate_tokens(data)
+        tokens = self._generate_tokens(data)
 
         return tokens, 201

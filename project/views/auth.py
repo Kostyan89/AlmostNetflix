@@ -6,8 +6,7 @@ from marshmallow import ValidationError
 
 from project.dao.models import User
 from project.tools.validators import AuthValidator
-from project.schemas.users import UserSchema
-from project.services.auth_service import AuthService
+from project.tools.token_generates import Authentication
 from project.setup_db import db
 from project.tools.validators import TokensValidator
 
@@ -19,7 +18,7 @@ class AuthViewLogin(Resource):
     def post(self):
         try:
             data = AuthValidator().load(request.json)
-            tokens = AuthService(db.session).create(**data)
+            tokens = Authentication().create(**data)
             return tokens, HTTPStatus.CREATED
         except ValidationError as e:
             abort(
@@ -31,7 +30,7 @@ class AuthViewLogin(Resource):
         auth = TokensValidator().load(request.json)
         if auth is None:
             abort(400)
-        tokens = AuthService(db.session).update(request.json)
+        tokens = Authentication().update(request.json)
         return tokens, 201
 
 
