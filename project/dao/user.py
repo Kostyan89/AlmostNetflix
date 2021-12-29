@@ -37,7 +37,8 @@ class UserDAO(BaseDAO):
         self._db_session.add(user)
         self._db_session.commit()
 
-    def update(self, new_password):
+    def update(self, user_id, new_password):
+        self.get_by_id(user_id)
         user.password = new_password
         self._db_session.add(user)
         self._db_session.commit()
