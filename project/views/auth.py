@@ -18,7 +18,7 @@ class AuthViewLogin(Resource):
     def post(self):
         try:
             data = AuthValidator().load(request.json)
-            tokens = AuthService().create(**data)
+            tokens = AuthService(db.session).create(**data)
             return tokens, HTTPStatus.CREATED
         except ValidationError as e:
             abort(
@@ -30,7 +30,7 @@ class AuthViewLogin(Resource):
         auth = AuthValidator().load(request.json)
         if auth is None:
             abort(400)
-        tokens = AuthService().update(request.json)
+        tokens = AuthService(db.session).update(request.json)
         return tokens, 201
 
 
