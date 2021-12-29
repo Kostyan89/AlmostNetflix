@@ -26,15 +26,15 @@ class Authentication:
         refresh_token = jwt.encode(data, BaseConfig.SECRET_KEY, algorithm=current_app.config["ALGO"])
         return {"access_token": access_token, "refresh_token": refresh_token}
 
-    def create(self, username, password):
-        user = db.session.query(User).filter(User.username == username).first()
+    def create(self, email, password):
+        user = db.session.query(User).filter(User.email == email).first()
 
         ok = compare_passwords(password_hash=user.password, other_password=password)
         if not ok:
             abort(401)
         return self._generate_tokens({
             "email": user.email,
-            "role": user.role
+            "password": user.password
         })
 
     def update(self, refresh_token):
