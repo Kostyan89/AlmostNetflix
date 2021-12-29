@@ -7,7 +7,6 @@ from marshmallow import ValidationError
 from project.dao.models import User
 from project.tools.validators import AuthValidator
 from project.tools.token_generates import Authentication
-from project.setup_db import db
 from project.tools.validators import TokensValidator
 
 auth_ns = Namespace('auth')
@@ -28,10 +27,10 @@ class AuthViewLogin(Resource):
 
     def put(self):
         auth = TokensValidator().load(request.json)
-        if auth is None:
-            abort(400)
-        tokens = Authentication().update(request.json)
-        return tokens, 201
+        try:
+            return Authentication().update(auth), 201
+        except ValidationError as e:
+            abort(HTTPStatus.BAD_REQUEST, message=str(e))
 
 
 @auth_ns.route('/register')

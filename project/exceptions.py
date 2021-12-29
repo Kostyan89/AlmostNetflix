@@ -6,5 +6,7 @@ class DublicateError(Exception):
     pass
 
 
+class ValidationError(Exception):
+    pass
 
 
