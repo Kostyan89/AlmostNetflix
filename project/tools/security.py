@@ -27,9 +27,9 @@ def get_hash(password):
     ).decode("utf-8", "ignore")
 
 
-def compare_passwords(get_hash, password):
+def compare_passwords(hash, password):
     return hmac.compare_digest(
-        base64.b64decode(get_hash),
+        base64.b64decode(hash),
         hashlib.pbkdf2_hmac(hash_name='sha256',
                             password=password.encode(),
                             salt=current_app.config["PWD_HASH_SALT"],

@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 from flask import request, current_app
 from flask_restx import abort
-from jwt import jwt
+import jwt
 
 from project.dao.models import User
 from project.services import UserService

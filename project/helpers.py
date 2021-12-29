@@ -16,5 +16,5 @@ def auth_required(func):
             user = jwt.decode(token, BaseConfig.SECRET_KEY, algorithms=['HS256'])
         except Exception as e:
             print("JWT Decode Exception", e)
-        return func(*args, *kwargs)
+        return func(*args, *kwargs, uid=user['id'])
     return wrapper

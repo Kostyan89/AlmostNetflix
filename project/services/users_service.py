@@ -44,6 +44,6 @@ class UserService(BaseService):
     def update_password(self, uid, new_password):
         user = self.get_item_by_id(uid)
         password_hash = get_hash(new_password)
-        while compare_passwords(password_hash, user.password):
-            self.dao.update(password_hash)
+        compare_passwords(password_hash, user.password)
+        self.dao.update(password_hash)
         return user

@@ -10,8 +10,5 @@ class Auth(BaseMixin, db.Model):
     password = db.Column(db.String(255))
 
 
-class AuthValidator(Schema):
-    email = fields.Str(required=True)
-    password = fields.Str(required=True)
 
 

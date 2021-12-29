@@ -5,7 +5,7 @@ from flask_restx import Resource, Namespace, abort
 from marshmallow import ValidationError
 
 from project.dao.models import User
-from project.dao.models.auth import AuthValidator
+from project.schemas.auth import AuthValidator
 from project.schemas.users import UserSchema
 from project.services.auth_service import AuthService
 from project.setup_db import db
@@ -39,8 +39,7 @@ class AuthViewRegister(Resource):
     def post(self):
         try:
             data = AuthValidator().load(request.json)
-            new_user = User(**data)
-            return new_user, 201
+            return User(**data), 201
         except ValidationError:
             abort(
                 code=HTTPStatus.BAD_REQUEST,
