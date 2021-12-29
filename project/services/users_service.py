@@ -16,16 +16,16 @@ from project.tools.security import get_hash, compare_passwords
 class UserService(BaseService):
     def __init__(self, session: scoped_session):
         super().__init__(self, session)
-        self.dao = UserDAO
+        self.dao = UserDAO(self._db_session)
 
     def get_item_by_id(self, uid):
-        user = UserDAO(self._db_session).get_by_id(uid)
+        user = self.dao.get_by_id(uid)
         if not user:
             raise ItemNotFound
         return UserSchema().dump(user)
 
     def get_all_users(self):
-        users = UserDAO(self._db_session).get_all()
+        users = self.dao.get_all()
         return UserSchema(many=True).dump(users)
 
     def create_user(self, user_d):
