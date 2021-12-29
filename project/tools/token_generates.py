@@ -49,7 +49,7 @@ class Authentication:
                 algorithms=current_app.config["ALGO"],
             )
         except Exception:
-            return UpdateError
+            raise UpdateError
 
         username = data.get("username")
 
