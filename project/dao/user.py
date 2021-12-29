@@ -24,22 +24,21 @@ class UserDAO(BaseDAO):
     def create(self, email, password):
         try:
             new_user = User(email, password)
-            self.session.add(new_user)
-            self.session.commit()
+            self._db_session.add(new_user)
+            self._db_session.commit()
             return new_user
         except IntegrityError as e:
             raise DublicateError
 
-    def partially_update(self, user_d):
-        user = self.get_by_id(user_d.get("id"))
-        user.name = user_d.get("name")
-        user.surname = user_d.get("surname")
-        user.favorite_genre = user_d.get("favorite_genre")
-        self.session.add(user)
-        self.session.commit()
+    def partially_update(self, user_d, name=None, surname=None, favorite_genre=None):
+        user = self.get_by_id(user_d)
+        if name:
+            user.name = name
+        self._db_session.add(user)
+        self._db_session.commit()
 
     def update(self, new_password):
         user.password = new_password
-        self.session.add(user)
-        self.session.commit()
+        self._db_session.add(user)
+        self._db_session.commit()
 
