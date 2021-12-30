@@ -11,5 +11,5 @@ class User(BaseMixin, db.Model):
     surname = db.Column(db.String(100))
     favorite_genre = db.Column(db.Integer, db.ForeignKey("genres.id"))
 
-    # def __repr__(self):
-    #     return f"<User '{self.name.title()}'>"
+    def __repr__(self):
+        return f"<User '{self.name.title()}'>"

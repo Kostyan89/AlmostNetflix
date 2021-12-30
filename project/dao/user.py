@@ -15,14 +15,14 @@ class UserDAO(BaseDAO):
     def get_all(self):
         return self._db_session.query(User).all()
 
-    def create(self, email=None, password=None):
-        try:
-            user_d = User(email, password)
-            self._db_session.add(user_d)
-            self._db_session.commit()
-            return user_d
-        except IntegrityError:
-            raise DublicateError
+    # def create(self, email=None, password=None):
+    #     try:
+    #         user_d = User(email, password)
+    #         self._db_session.add(user_d)
+    #         self._db_session.commit()
+    #         return user_d
+    #     except IntegrityError:
+    #         raise DublicateError
 
     def partially_update(self, user_d, name=None, surname=None, favorite_genre=None):
         user = self.get_by_id(user_d)
@@ -40,3 +40,13 @@ class UserDAO(BaseDAO):
         user.password = new_password
         self._db_session.add(user)
         self._db_session.commit()
+
+    def create(self, **data):
+        try:
+            user_d = User(**data)
+            self._db_session.add(user_d)
+            self._db_session.commit()
+            return user_d
+        except IntegrityError:
+            raise DublicateError
+

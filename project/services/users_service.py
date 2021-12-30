@@ -1,18 +1,15 @@
 from sqlalchemy.orm.scoping import scoped_session
 
 from project.dao.user import UserDAO
-from project.exceptions import ItemNotFound
+from project.exceptions import ItemNotFound, DublicateError
 from project.schemas.users import UserSchema
 from project.services.base import BaseService
 from project.setup_db import db
 
-from project.tools.security import get_hash, compare_passwords
+from project.tools.security import get_hash, compare_passwords, generate_password_digest
 
 
 class UserService(BaseService):
-    # def __init__(self, session: scoped_session):
-    #     super().__init__(self, session)
-    #     self.dao = UserDAO(self._db_session)
 
     def get_item_by_id(self, uid):
         user = UserDAO(db.session).get_by_id(uid)
@@ -24,9 +21,6 @@ class UserService(BaseService):
         users = self.dao.get_all()
         return UserSchema(many=True).dump(users)
 
-    def create_user(self, user_d):
-        return self.dao._db_session.create(user_d)
-
     def partially_update(self, uid, **kwargs):
         return self.dao.partially_update(uid, **kwargs)
 
@@ -36,3 +30,13 @@ class UserService(BaseService):
         compare_passwords(password_hash, user.password)
         self.dao.update(password_hash)
         return user
+
+    def create(self, **data_in):
+        try:
+            user_pass = data_in.get("password")
+            if user_pass:
+                data_in["password"] = generate_password_digest(user_pass)
+            user = UserDAO(self._db_session).create(**data_in)
+            return UserSchema().dump(user)
+        except Exception:
+            raise DublicateError

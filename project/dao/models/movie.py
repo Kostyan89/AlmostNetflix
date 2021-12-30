@@ -12,3 +12,6 @@ class Movie(BaseMixin, db.Model):
     rating = db.Column(db.Float, nullable=False)
     genre_id = db.Column(db.Integer, db.ForeignKey("genres.id"), nullable=False)
     director_id = db.Column(db.Integer, db.ForeignKey("directors.id"), nullable=False)
+
+    def __repr__(self):
+        return f"<Genre '{self.title.title()}'>"
