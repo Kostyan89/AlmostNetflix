@@ -14,12 +14,8 @@ class MoviesView(Resource):
     @movies_ns.response(200, "OK")
     def get(self):
         """Get all movies"""
-        page = request.args.get("page", 1)
-        limit = 12
-        start = (page - 1) * limit
-
         return (
-            db.session.query(MovieService).limit(limit).offset(start).get_all_movies()
+            db.session.query(MovieService).get_all_movies()
         )
 
 
