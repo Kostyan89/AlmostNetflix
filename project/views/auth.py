@@ -5,6 +5,8 @@ from flask_restx import Resource, Namespace, abort
 from marshmallow import ValidationError
 
 from project.dao.models import User
+from project.services import UserService
+from project.setup_db import db
 from project.tools.validators import AuthValidator
 from project.tools.token_generates import Authentication
 from project.tools.validators import TokensValidator
@@ -35,9 +37,9 @@ class AuthViewRegister(Resource):
     def post(self):
         try:
             data = AuthValidator().load(request.json)
-            return User(**data), 201
+            return UserService(db.session).create_user(**data), 201
         except ValidationError:
             abort(
                 code=HTTPStatus.BAD_REQUEST,
-                message="Не могу создать, чего-то не хватает",
+                message="Не могу создать, чего-то не хватает"
             )

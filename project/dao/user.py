@@ -15,12 +15,12 @@ class UserDAO(BaseDAO):
     def get_all(self):
         return self._db_session.query(User).all()
 
-    def create(self, email, password):
+    def create(self, email=None, password=None):
         try:
-            new_user = User(email, password)
-            self._db_session.add(new_user)
+            user_d = User(email, password)
+            self._db_session.add(user_d)
             self._db_session.commit()
-            return new_user
+            return user_d
         except IntegrityError:
             raise DublicateError
 

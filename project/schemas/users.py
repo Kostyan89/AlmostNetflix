@@ -8,7 +8,6 @@ class UserData(Schema):
 
 
 class UserSchema(UserData):
-    id = fields.Int(required=True)
     email = fields.Str(required=True)
     password = fields.Str(required=True, load_only=True)
-    role = fields.Str(required=True)
+

@@ -4,17 +4,18 @@ from project.dao.user import UserDAO
 from project.exceptions import ItemNotFound
 from project.schemas.users import UserSchema
 from project.services.base import BaseService
+from project.setup_db import db
 
 from project.tools.security import get_hash, compare_passwords
 
 
 class UserService(BaseService):
-    def __init__(self, session: scoped_session):
-        super().__init__(self, session)
-        self.dao = UserDAO(self._db_session)
+    # def __init__(self, session: scoped_session):
+    #     super().__init__(self, session)
+    #     self.dao = UserDAO(self._db_session)
 
     def get_item_by_id(self, uid):
-        user = self.dao.get_by_id(uid)
+        user = UserDAO(db.session).get_by_id(uid)
         if not user:
             raise ItemNotFound
         return UserSchema().dump(user)
@@ -24,7 +25,7 @@ class UserService(BaseService):
         return UserSchema(many=True).dump(users)
 
     def create_user(self, user_d):
-        return self.dao.create(user_d)
+        return self.dao._db_session.create(user_d)
 
     def partially_update(self, uid, **kwargs):
         return self.dao.partially_update(uid, **kwargs)
