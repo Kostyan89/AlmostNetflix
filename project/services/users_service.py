@@ -18,17 +18,17 @@ class UserService(BaseService):
         return UserSchema().dump(user)
 
     def get_all_users(self):
-        users = self.dao.get_all()
+        users = UserDAO(db.session).get_all()
         return UserSchema(many=True).dump(users)
 
     def partially_update(self, uid, **kwargs):
-        return self.dao.partially_update(uid, **kwargs)
+        return UserDAO(db.session).partially_update(uid, **kwargs)
 
     def update_password(self, uid, new_password):
         user = self.get_item_by_id(uid)
         password_hash = get_hash(new_password)
         compare_passwords(password_hash, user.password)
-        self.dao.update(password_hash)
+        UserDAO(db.session).update(password_hash)
         return user
 
     def create(self, **data_in):
@@ -39,4 +39,4 @@ class UserService(BaseService):
             user = UserDAO(self._db_session).create(**data_in)
             return UserSchema().dump(user)
         except Exception:
-            raise DublicateError
+            DublicateError
