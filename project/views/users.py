@@ -14,18 +14,6 @@ users_ns = Namespace("users")
 
 @users_ns.route("/")
 class UsersView(Resource):
-    def post(self):
-        try:
-            data = UserSchema().load(request.json)
-            return UserService(db.session).create_user(**data)
-        except ValidationError as e:
-            abort(code=HTTPStatus.BAD_REQUEST, message=str(e))
-        except DublicateError:
-            abort(404)
-
-
-@users_ns.route("/<int:uid>")
-class UserView(Resource):
     @auth_required
     def get(self, uid):
         try:

@@ -37,7 +37,7 @@ class AuthViewRegister(Resource):
     def post(self):
         try:
             data = AuthValidator().load(request.json)
-            return UserService(db.session).create(**data), 201
+            return UserService(db.session).create_user(**data), 201
         except ValidationError:
             abort(
                 code=HTTPStatus.BAD_REQUEST,

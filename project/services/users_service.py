@@ -28,10 +28,10 @@ class UserService(BaseService):
         user = self.get_item_by_id(uid)
         password_hash = get_hash(new_password)
         compare_passwords(password_hash, user.password)
-        UserDAO(db.session).update(password_hash)
+        UserDAO(db.session).update(uid, password_hash)
         return user
 
-    def create(self, **data_in):
+    def create_user(self, **data_in):
         try:
             user_pass = data_in.get("password")
             if user_pass:
