@@ -39,4 +39,4 @@ class UserService(BaseService):
             user = UserDAO(self._db_session).create(**data_in)
             return UserSchema().dump(user)
         except Exception:
-            DublicateError
+            raise DublicateError

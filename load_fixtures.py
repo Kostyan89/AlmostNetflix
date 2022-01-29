@@ -2,7 +2,7 @@ from sqlalchemy.exc import IntegrityError
 
 from project.config import DevelopmentConfig
 from project.dao.models import Genre, Director, Movie
-from project.server import create_app
+from project.app import create_app
 from project.setup_db import db
 from project.utils import read_json
 
